@@ -1,24 +1,15 @@
-var elasticsearch = require('elasticsearch');
-var nGram = require('n-gram');
-var getYoutubeSubtitles = require('@joegesualdo/get-youtube-subtitles-node');
-var async = require('async');
-
-var client = new elasticsearch.Client({});
-client.ping({
-     requestTimeout: 30000,
- }, function(error) {
-     if (error) {
-         console.error('elasticsearch cluster is down!');
-     } else {
-         console.log('Everything is ok');
-     }
- });
-
+var getCaption = require('../routes/getCaptions.js')
 let videoIds = ['5-vNmVor6Ug','FdIrbyMGvmw'];
-var k;
-var val=0;
-async function fetchtans (videoIds) {
-  videoIds.forEach(async videoId => {
+for(var i = 0;i<videoIds.length;i++)
+{	console.log("abc");
+    var id = videoIds[i];
+	getCaption.processVideo(id,i);
+	console.log("def");
+}
+
+
+
+function processVideo(videoId,index){
 // for(var i=0 ;i<videoIds.length;i++)
  console.log(videoId);
 // async.forEachOfSeries(videoIds, function(videoId, index, callback) {
@@ -44,22 +35,20 @@ getYoutubeSubtitles(videoId, {type: 'nonauto'})
   	  
   	  // console.log("here",sub);
   })
-  console.log(videoId,transcript.slice(0,100));
+  console.log(videoIds[0],transcript.slice(0,100));
   client.index({
      index: 'caption_you',
-     id: videoId,
+     id: 60+index,
      type: 'trans',
      body: {
          "transcript": transcript,
-         "videoId": videoId,
+         "videoId": videoIds[0],
          
      }
  }, function(err, resp, status) {
      if(!err)
      {console.log(resp);
-     	  	  // console.log("transcript",transcript.slice(0,100));
-
- 	  transcriptProcess(words,videoId);
+ 	  transcriptProcess(words);
  	  console.log("okay");
  	 }
  });
@@ -67,10 +56,10 @@ getYoutubeSubtitles(videoId, {type: 'nonauto'})
 .catch(err => {
   console.log(err)	
 })
-})}
+}
 
 
-function transcriptProcess(words,videoId)
+function transcriptProcess(words)
 {console.log("transcriptProcess called");
  // words.forEach(function(word){
  // 	console.log(word);
@@ -88,31 +77,27 @@ function transcriptProcess(words,videoId)
  		{	//console.log("!",temp);
  			biMap.set(temp,1);}
  	// console.log(wordSet,":",biMap.get(wordSet));
- })
- var i=0;
- for (var [key, value] of biMap) {
-  console.log(key + ' = ' + value);
-  indexWord(key,value,i,videoId);
-  i++;
-}
+ })	
+ biMap.forEach(indexDoc);
+ // console.log("key:",k,"value:",val);
 
 }
 
-function indexWord(key,value,i,videoId)
+function indexDoc(value,key,map)
 {	if(val<value)
 	{
 		val=value;
 		k=key;
 	}
-	console.log(videoId);
+
 	client.index({
 	 index: 'caption_you',
-     id: videoId+":"+i,
+     id: 15,
      type: 'wordCount',
      body: { 
          "words": key,
          "count": value,
-         "videoId":videoId,
+         "videoId":videoIds[0],
      }
 	},function(err, resp, status) {
      if(!err)
@@ -122,7 +107,7 @@ function indexWord(key,value,i,videoId)
  	 }
  });
 }
-fetchtans(videoIds);
+
 // console.log(words.length);
 
  // client.index({
