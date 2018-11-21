@@ -9,12 +9,14 @@ client.ping({
          console.log('Everything is ok');
      }
  });
+exports.getTags=function (){
+  var result = [];
 client.search({  
   index: 'caption_you',
   type: 'wordCount',
   body: {
         sort: [{ "count": { "order": "desc" } }],
-        size: 100,
+        size: 10,
         query: { match_all: {}}
      }
 },function (error, response,status) {
@@ -26,7 +28,14 @@ client.search({
       console.log(response);
       console.log("--- Hits ---");
       response.hits.hits.forEach(function(hit){
-        console.log(hit);
+      // console.log(hit._source.words,hit._source.count);
+      result.push(hit._source.words);
+        // result.push(hit._source.words);
       })
+      // console.log(result);
+      
+      return result;
     }
 });
+
+}

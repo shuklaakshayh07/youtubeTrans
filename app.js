@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var routes=require('./routes');
 
 var app = express();
 // var transFetch = require('./routes/YoutubeApi')
@@ -19,9 +20,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+app.get('/', routes.index);
+app.get('/about',routes.about);
 app.use('/users', usersRouter);
-
+app.get('/mainPage',routes.mainPage);
+app.post('/search', routes.searchVideo);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

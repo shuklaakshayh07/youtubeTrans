@@ -1,0 +1,10 @@
+h1 Top Tags
+form(action="/search",method="post")
+    p
+        label Enter New Task
+        input(type='text',placeholder='Search for videos',name='search_query')
+    p
+        input(type='submit',value='Search')
+    ul
+      each tag in tags
+        li #{tag}
