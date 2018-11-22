@@ -14,7 +14,7 @@
 // exports.index = function(req, res){
 //   res.render('index', { title: 'TODO APP' });
 // };
-
+var async = require("async");
 /* GET home page. */
 var elasticsearch = require('elasticsearch');
 var client = new elasticsearch.Client({});
@@ -59,7 +59,7 @@ client.search({
       result.push(hit._source.words);
         // result.push(hit._source.words);
       })
-      console.log(result);
+      // console.log(result);
      res.render('mainPage',{tags:result}); 
       
       // return result;
@@ -73,15 +73,23 @@ client.search({
 
 
 };
-exports.searchVideo=function(req,res){
+exports.searchVideo=function(req,res){ 
+		var url=req.url;
+		console.log("abc",url);
+		// console.log(req);
 		var result = [];
-        var queryTerm={};
+		var videoIds = [];
+		var queryTerm={};
+		if(url.lastIndexOf("/search?q")!=-1)
+		{
+			queryTerm=url.slice(url.lastIndexOf("/search?q"));
+		}
+		if(url=="/search")
         queryTerm=req.body['search_query'];
+    	console.log(queryTerm);
  		client.search({
 		  index: 'caption_you',
 		  type: 'wordCount',
-		  // sort: [{ "count": { "order": "desc" } }],
-    //       size: 10,
 	      body: {
 	      	sort: [{ "count": { "order": "desc" } }],
         	size: 10,
@@ -96,26 +104,91 @@ exports.searchVideo=function(req,res){
       console.log("search error: "+error)
     }
     else {
-      // console.log("--- Response ---");
-      // console.log(response);
-      // console.log("--- Hits ---");
       response.hits.hits.forEach(function(hit){
-      console.log(hit._source.videoId,hit._source.count);
-       var count=result.length;
+       var count=videoIds.length;
        var flag=false;
     	for(var i=0;i<=count;i++)
     	{
-        if(result[i]==hit._source.videoId){
+        if(videoIds[i]==hit._source.videoId){
         	flag=true;
         }
     	}
     	if(!flag)
-    		result.push(hit._source.videoId);
-    	  
-        // result.push(hit._source.words);
+    		// result.push(populateVideo(hit._source.videoId);
+    		videoIds.push(hit._source.videoId);
       })
-      console.log("result",result);
-      res.render('search',{links:result}); 
+      // console.log("videoIds",videoIds);
+      // var videoIdCount = 9999999;
+      var i=1;
+      videoIds.forEach(function(videoId){
+		client.search({
+		  index: 'caption_you',
+		  type: 'trans',
+		  // sort: [{ "count": { "order": "desc" } }],
+    //       size: 10,
+	      body: {
+        	size: 10,
+        	query: {
+            	match: {
+                "_id":videoId
+            }
+        }
+    		}
+		},function (error, response,status) {
+    if (error){
+      console.log("search error: "+error)
+   		 }
+   		 else{	
+   		 	var videoIdCount = videoIds.length;
+   		 		// console.log(response.hits.hits);
+   		 	var temp = {};
+    		temp["videoId"]=response.hits.hits[0]._source.videoId;
+    		temp["title"]=response.hits.hits[0]._source.title;
+    		temp["description"]=response.hits.hits[0]._source.description;
+    		// console.log("temp",temp);
+    		result.push(temp);
+    		if(i==videoIdCount)
+    		{
+    			 res.render('search',{links:result}); 
+    		}
+    		else{
+    			i++
+    		}
+   		 	      // response.hits.hits.function() {}orEach(function(hit){
+			      // console.log(hit);
+			       
+			     //   var flag=false;
+			    	// for(var i=0;i<=count;i++)
+			    	// {
+			     //    if(videoIds[i]==hit._source.videoId){
+			     //    	flag=true;
+			     //    }
+			    	// }
+			    	// if(!flag)
+			    	// 	videoIds.push(hit._source.videoId);
+			    	  
+			     //    // result.push(hit._source.words);
+			     //  })
+
+
+
+   		 // 	var temp = {};
+    		// temp["videoId"]=hit._source.videoId;
+    		// temp["title"]=hit._source.title;
+    		// temp["description"]=hit._source.description;
+    		// result.push(temp);})
+
+   		 }      
+   		})
+
+      
+      // return result;
+    	
+
+	})
+     // console.log("result 123",result);
+     // res.render('search',{links:result}); 
+
       
       // return result;
     	}

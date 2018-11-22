@@ -1,7 +1,5 @@
 h1 Search Result for Keywords:
     ul
       each link in links
-        a.btn.btn-default(href="https://www.youtube.com/watch?v="+link.videoId) #{link.title}
-        p
-         #{link.description}
-        br
+        a.btn.btn-default(style='line-height:50px;text-align:center,font:10px')(href="https://www.youtube.com/watch?v="+link.videoId) #{link.title}
+
