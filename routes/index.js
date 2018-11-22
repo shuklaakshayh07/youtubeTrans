@@ -37,6 +37,7 @@ exports.about= function(req,res){
   res.render('index',{title:'about'});
 };
 exports.mainPage=function(req,res){
+	console.log(req.url);
   var result = [];
 client.search({  
   index: 'caption_you',
@@ -73,6 +74,94 @@ client.search({
 
 
 };
+
+
+exports.searchVideoTag= function(req,res){
+  var url=req.url;
+  console.log("abc",url);
+  var index = url.lastIndexOf('/');
+  var queryTerm = url.slice(index+1);
+  var result = [];
+  var videoIds = [];
+  // console.log(tag);
+  client.search({
+      index: 'caption_you',
+      type: 'wordCount',
+        body: {
+          sort: [{ "count": { "order": "desc" } }],
+          size: 10,
+          query: {
+              match: {
+                "words": queryTerm
+            }
+        }
+    }
+    },function (error, response,status) {
+    if (error){
+      console.log("search error: "+error)
+    }
+    else {
+      response.hits.hits.forEach(function(hit){
+       var count=videoIds.length;
+       var flag=false;
+      for(var i=0;i<=count;i++)
+      {
+        if(videoIds[i]==hit._source.videoId){
+          flag=true;
+        }
+      }
+      if(!flag)
+        // result.push(populateVideo(hit._source.videoId);
+        videoIds.push(hit._source.videoId);
+      })
+      // console.log("videoIds",videoIds);
+      // var videoIdCount = 9999999;
+      var i=1;
+      videoIds.forEach(function(videoId){
+    client.search({
+      index: 'caption_you',
+      type: 'trans',
+      // sort: [{ "count": { "order": "desc" } }],
+    //       size: 10,
+        body: {
+          size: 10,
+          query: {
+              match: {
+                "_id":videoId
+            }
+        }
+        }
+    },function (error, response,status) {
+    if (error){
+      console.log("search error: "+error)
+       }
+       else{  
+        var videoIdCount = videoIds.length;
+          // console.log(response.hits.hits);
+        var temp = {};
+        temp["videoId"]=response.hits.hits[0]._source.videoId;
+        temp["title"]=response.hits.hits[0]._source.title;
+        temp["description"]=response.hits.hits[0]._source.description;
+        // console.log("temp",temp);
+        result.push(temp);
+        if(i==videoIdCount)
+        {
+           res.render('search',{links:result}); 
+        }
+        else{
+          i++
+        }
+
+       }      
+      })
+  })
+        }
+
+  });
+  // res.render('search', { title:  tag });
+};
+
+
 exports.searchVideo=function(req,res){ 
 		var url=req.url;
 		console.log("abc",url);
@@ -155,44 +244,11 @@ exports.searchVideo=function(req,res){
     		else{
     			i++
     		}
-   		 	      // response.hits.hits.function() {}orEach(function(hit){
-			      // console.log(hit);
-			       
-			     //   var flag=false;
-			    	// for(var i=0;i<=count;i++)
-			    	// {
-			     //    if(videoIds[i]==hit._source.videoId){
-			     //    	flag=true;
-			     //    }
-			    	// }
-			    	// if(!flag)
-			    	// 	videoIds.push(hit._source.videoId);
-			    	  
-			     //    // result.push(hit._source.words);
-			     //  })
-
-
-
-   		 // 	var temp = {};
-    		// temp["videoId"]=hit._source.videoId;
-    		// temp["title"]=hit._source.title;
-    		// temp["description"]=hit._source.description;
-    		// result.push(temp);})
 
    		 }      
    		})
-
-      
-      // return result;
-    	
-
 	})
-     // console.log("result 123",result);
-     // res.render('search',{links:result}); 
-
-      
-      // return result;
-    	}
+	    	}
 
 	});
 };
