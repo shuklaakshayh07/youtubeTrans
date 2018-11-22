@@ -26,10 +26,29 @@ var val=0;
 var k;
  var videoIds=[];
  var check =true;
- var nextPageToken='';
- var i=0;
-while(check)
-{var apiLink="https://www.googleapis.com/youtube/v3/search?"+nextPageToken+"key=AIzaSyDb1QhtiZVjW6EVSQoMSjx6ZhYWolpRhXQ&channelId=UCu3Ri8DI1RQLdVtU12uIp1Q&part=snippet,id&order=date&maxResults=20";
+ // var nextPage='';
+ 
+ function videoFactory(nextPage)
+ {	console.log("waypint 1");
+ 	videoProducer(nextPage,function(err,data){
+ 		if(err){
+ 			console.log(err);
+ 		}
+ 		else
+	 			{var nextPage=data;
+	 				console.log("first return token",nextPage);
+			 			if(nextPage && nextPage!='' )
+			 				videoFactory(nextPage);
+	 			}
+ 	});
+ 	
+ 	
+ }
+const videoProducer=function(nextPageToken,callback)
+{	
+	// console.log("waypint 2");
+	// console.log("intial token",nextPageToken);
+	var apiLink="https://www.googleapis.com/youtube/v3/search?"+nextPageToken+"key=AIzaSyDb1QhtiZVjW6EVSQoMSjx6ZhYWolpRhXQ&channelId=UCu3Ri8DI1RQLdVtU12uIp1Q&part=snippet,id&order=date&maxResults=5";
 var request = require('request');
 request(apiLink, function (error, response, body) { var videos = [];
     if (!error && response.statusCode == 200) {
@@ -57,9 +76,22 @@ request(apiLink, function (error, response, body) { var videos = [];
      		videos.push(tempObj);
      		
      	})
-        videos.forEach(async video => {
+        getYoutubedata(videos,function(err){
+        	if(!err)
+        		callback(null,nextPageToken);
+        })
+    // return nextPageToken
+    	
+    }
+			     })
+	
+	
+}
+const getYoutubedata= function (videos,callback)
+{
+	videos.forEach(async video => {
 			// for(var i=0 ;i<videos.length;i++)
-			 console.log(video);
+			 // console.log(video);
 			// async.forEachOfSeries(videoIds, function(video, index, callback) {
 			var finalString='';
 			var transcript = '';
@@ -101,7 +133,7 @@ request(apiLink, function (error, response, body) { var videos = [];
 			     {console.log(resp);
 			     	  	  // console.log("transcript",transcript.slice(0,100));
 
-			 	  transcriptProcess(words,video.videoId);
+			 	  // transcriptProcess(words,video.videoId);
 			 	  console.log("okay");
 			 	 }
 			 });
@@ -110,8 +142,8 @@ request(apiLink, function (error, response, body) { var videos = [];
 			  console.log(err)	
 			})
 			})
-    }
-			     })}
+	callback(null);
+}
 function transcriptProcess(words,videoId)
 {console.log("transcriptProcess called");
  // words.forEach(function(word){
@@ -165,7 +197,7 @@ function indexWord(key,value,type,i,videoId)
  });
 }
 			   
-
+videoFactory("");
 // var optionsget = {
 //     host : 'graph.facebook.com', // here only the domain name
 //     // (no http/https !)
