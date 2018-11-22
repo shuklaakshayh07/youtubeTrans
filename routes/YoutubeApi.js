@@ -25,15 +25,28 @@ client.ping({
 var val=0;
 var k;
  var videoIds=[];
-var apiLink="https://www.googleapis.com/youtube/v3/search?key=AIzaSyDb1QhtiZVjW6EVSQoMSjx6ZhYWolpRhXQ&channelId=UCu3Ri8DI1RQLdVtU12uIp1Q&part=snippet,id&order=date&maxResults=20";
+ var check =true;
+ var nextPageToken='';
+ var i=0;
+while(check)
+{var apiLink="https://www.googleapis.com/youtube/v3/search?"+nextPageToken+"key=AIzaSyDb1QhtiZVjW6EVSQoMSjx6ZhYWolpRhXQ&channelId=UCu3Ri8DI1RQLdVtU12uIp1Q&part=snippet,id&order=date&maxResults=20";
 var request = require('request');
 request(apiLink, function (error, response, body) { var videos = [];
     if (!error && response.statusCode == 200) {
-        console.log(body);
+        // console.log(body);
         body = JSON.parse(body);
+        if(body.nextPageToken)
+        {
+        	nextPageToken="pageToken="+body.nextPageToken+"&";
+        }
+        else{
+        	nextPageToken='';
+        	check = false;
+        }
+        console.log(nextPageToken);
         var allVideos=body['items']; // Print the google web page.
-        console.log(body.kind);
-     	console.log(allVideos);
+        // console.log(body.kind);
+     	// console.log(allVideos);
      	allVideos.forEach(function(video){
      		var tempObj = {};
      		tempObj["videoId"]=video.id["videoId"];
@@ -98,8 +111,7 @@ request(apiLink, function (error, response, body) { var videos = [];
 			})
 			})
     }
-			     })
-
+			     })}
 function transcriptProcess(words,videoId)
 {console.log("transcriptProcess called");
  // words.forEach(function(word){
