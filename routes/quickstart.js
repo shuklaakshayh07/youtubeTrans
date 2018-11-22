@@ -126,7 +126,7 @@ function getChannel(auth) {
   // });
   service.channels.list({
     auth: auth,
-    part: 'snippet,items',
+    part: 'snippet,contentDetails,statistics',
     forUsername: 'SiliconANGLE'
   }, function(err, response) {
     if (err) {
@@ -142,10 +142,10 @@ function getChannel(auth) {
       console.log('No channel found.');
     } else {
       console.log('This channel\'s ID is %s. Its title is \'%s\', and ' +
-                  'it has %s views.');//,
-                  // google.getSupportedAPIs(),
-                  // channels[0].snippet.title,
-                  // channels[0].statistics.viewCount);
+                  'it has %s views.',
+                  google.getSupportedAPIs(),
+                  channels[0].snippet.title,
+                  channels[0].statistics.viewCount);
     }
   });
 }
