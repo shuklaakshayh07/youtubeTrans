@@ -80,8 +80,9 @@ exports.searchVideo=function(req,res){
 		var result = [];
 		var videoIds = [];
 		var queryTerm={};
-		if(url.lastIndexOf("/search?q")!=-1)
-		{
+		console.log(url.lastIndexOf("/search?q="));
+		if(url.lastIndexOf("/search?q=")!=-1)
+		{	console.log("true");
 			queryTerm=url.slice(url.lastIndexOf("/search?q"));
 		}
 		if(url=="/search")
