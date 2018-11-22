@@ -146,6 +146,7 @@ exports.searchVideo=function(req,res){
     		temp["videoId"]=response.hits.hits[0]._source.videoId;
     		temp["title"]=response.hits.hits[0]._source.title;
     		temp["description"]=response.hits.hits[0]._source.description;
+        temp["thumbnail"]=response.hits.hits[0]._source.thumbnails;
     		// console.log("temp",temp);
     		result.push(temp);
     		if(i==videoIdCount)

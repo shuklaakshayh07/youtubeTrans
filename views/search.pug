@@ -1,5 +1,6 @@
 h1 Search Result for Keywords:
     ul
       each link in links
-        a.btn.btn-default(style='line-height:50px;text-align:center,font:10px')(href="https://www.youtube.com/watch?v="+link.videoId) #{link.title}
-
+        img.className#IdName(src=link.thumbnail alt="Image Title")
+        a(style='line-height:50px;text-align:center,font-size:10px;color:#000000;margin-left:5px;text-decoration:none')(href="https://www.youtube.com/watch?v="+link.videoId) #{link.title}
+        br 
