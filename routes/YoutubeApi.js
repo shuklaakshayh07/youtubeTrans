@@ -81,8 +81,10 @@ function fetchChannelVideos(functionCallback, channelId, nextPageToken) {
 						if(body["result"]["frequency_analysis"][0] && body["result"]["frequency_analysis"][0]["unigramsList"]){
 							var unigramList = body["result"]["frequency_analysis"][0]["unigramsList"];
 							unigramList.forEach(function(word){
-								frequencyMap.set(word.word,word.frequency);
-								finalList.push(word.word);
+								if(word != "gt"){
+									frequencyMap.set(word.word,word.frequency);
+									finalList.push(word.word);
+								}
 							});
 						}
 
