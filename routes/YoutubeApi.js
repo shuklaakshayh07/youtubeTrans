@@ -2,6 +2,7 @@ var elasticsearch = require('elasticsearch');
 var nGram = require('n-gram');
 var getYoutubeSubtitles = require('@joegesualdo/get-youtube-subtitles-node');
 var async = require('async');
+var request = require('request');
 
 var client = new elasticsearch.Client({});
 client.ping({
@@ -14,13 +15,12 @@ client.ping({
 	 	}
 	});
 
-var val=0;
-var k;
-var videoIds=[];
-var request = require('request');
-var nextPageToken;
 
 fetchChannelVideos(function() {},'UCu3Ri8DI1RQLdVtU12uIp1Q',"");
+
+var nextPageToken;
+var val = 0;
+var k;
 
 function fetchChannelVideos(functionCallback, channelId, nextPageToken) {
 	console.log("IN fetchChannelVideos method");
@@ -46,8 +46,91 @@ function fetchChannelVideos(functionCallback, channelId, nextPageToken) {
 	     	})
 
 			async.forEachOfSeries(videos, function(video, item, callback) {
-				getYoutubeSubtitlesAndIndex(video);
-				callback();
+				console.log("getYoutubeSubtitlesAndIndex");
+				var transcript = '';
+                var flag = false;
+
+                //get transcript
+				getYoutubeSubtitles(video.videoId, {type: 'nonauto'})
+				.then(subtitles => { 
+					subtitles.forEach(function(sub){
+					  	transcript += sub.part + "";
+					});
+			        var date = new Date().getTime();
+
+			        //process transcript
+			        var url = 'http://data.cube365.net/free/entity/extract';
+				    var formData = {
+				    	freeText : transcript,
+				    	select_method : 4,
+				    	frequency_count : 1
+				    };
+				    var headers = { 
+					    'Content-Type': 'application/x-www-form-urlencoded' 
+					};
+				    request.post({
+					   	url: url,
+					   	form: formData,
+					   	headers: headers,
+					   	method: 'POST'
+					},function (e, r, body) {
+						body = JSON.parse(body);
+						var finalList = [];
+						var frequencyMap = new Map();
+
+						if(body["result"]["frequency_analysis"][0] && body["result"]["frequency_analysis"][0]["unigramsList"]){
+							var unigramList = body["result"]["frequency_analysis"][0]["unigramsList"];
+							unigramList.forEach(function(word){
+								frequencyMap.set(word.word,word.frequency);
+								finalList.push(word.word);
+							});
+						}
+
+						if(body["result"]["frequency_analysis"][1] && body["result"]["frequency_analysis"][1]["bigramsList"]){
+							var bigramsList = body["result"]["frequency_analysis"][1]["bigramsList"];
+							bigramsList.forEach(function(word){
+								frequencyMap.set(word.word,word.frequency);
+								finalList.push(word.word);
+							});
+						}
+
+						if(body["result"]["frequency_analysis"][2] && body["result"]["frequency_analysis"][2]["trigramsList"]){
+							var trigramsList = body["result"]["frequency_analysis"][2]["trigramsList"];
+							trigramsList.forEach(function(word){
+								frequencyMap.set(word.word,word.frequency);
+								finalList.push(word.word);
+							});
+						}	
+
+						client.index({
+					     	index: 'youtube_entities',
+					     	id: video.videoId,
+					     	type: 'youtube_meta',
+					     	body: {
+					         	"transcript": transcript,
+					         	"videoId": video.videoId,
+					         	"title" : video.title,
+								"description" : video.description,
+								"thumbnail" : video.thumbnails,
+								"entities" : finalList.join(','),
+								"createdAt" : new Date().getTime()
+					     	}
+					 	}, function(err, resp, status) {
+					     	if(!err){
+					     		indexEntities(frequencyMap,video.videoId).then(function(res){
+					     			callback();
+					     		}).catch(function(err){
+					     			console.log(err);
+					     			callback();
+					     		})
+					 	 	}
+					 	});
+				  	});
+				})
+				.catch(err => {
+				  	console.log("has no subtitles",video.videoId);
+				  	callback();	
+				})
 			}, function(err) {
                 if(!err) {
                     if(nextPageToken && nextPageToken != "") {
@@ -62,80 +145,47 @@ function fetchChannelVideos(functionCallback, channelId, nextPageToken) {
 	});
 }
 
-function getYoutubeSubtitlesAndIndex(video){
-	var finalString = '';
-	var transcript = '';
-	getYoutubeSubtitles(video.videoId, {type: 'nonauto'})
-	.then(subtitles => { 
-		var words = [];	
-		subtitles.forEach(function(sub){
-		  	var word
-		  	var temps = sub.words
-		  	temps.forEach(function(word){
-		  		words.push(word.word);
-		  	});
-		  	finalString += words.toString();
-		  	transcript += sub.part + "";
+function indexEntities(frequencyMap,videoId){
+	var bulk_operations_array = [];
+	return new Promise( function (resolve, reject){
+		async.forEachOfSeries(frequencyMap, function([key, value], index, callback) {
+			var id = key.trim();
+			id = id.replace(" ","_")+ ":" +videoId;
+
+			var bulk_insert_data = {};
+			bulk_insert_data["frequency"] = value;
+			bulk_insert_data["text"] = key;
+			bulk_insert_data["videoId"] = videoId;
+            bulk_insert_data["createdAt"] = new Date().getTime();
+
+            var bulk_insert_action = {
+				"index": {
+					_index : "youtube_entities",
+					_type  : "entities",
+					_id    : id,
+
+				}
+			}
+
+			bulk_operations_array.push(bulk_insert_action, bulk_insert_data);
+        	
+        	callback();
+		},function(err){
+			if(!err){
+				if(bulk_operations_array.length > 0){
+					client.bulk({
+						"body" : bulk_operations_array
+					}).then(function(response) {
+						resolve("response");
+					}).catch(function(error) {
+						console.log('error while performing bulk operations in ES', error.toString());
+						reject(error.toString());
+					});
+				}
+				else{
+					resolve("found");
+				}
+			}
 		});
-        var date = new Date().getTime();
-	  	client.index({
-	     	index: 'caption_you',
-	     	id: video.videoId,
-	     	type: 'trans',
-	     	body: {
-	         	"transcript": transcript,
-	         	"videoId": video.videoId,
-	         	"title" : video.title,
-				"description" : video.description,
-				"thumbnails" : video.thumbnails,
-				"createdAt": date
-	     	}
-	 	}, function(err, resp, status) {
-	     	if(!err){
-	     		console.log(resp);
-	 	  		transcriptProcess(words,video.videoId);
-	 	 	}
-	 	});
-	})
-	.catch(err => {
-	  console.log(err);	
-	})
-}
-
-function transcriptProcess(words,videoId){
- 	var bigram = nGram.bigram(words);
- 	var trigram = nGram.bigram(words);
- 	var biMap=new Map();
- 	bigram.forEach(function(wordSet){	
- 		var temp = wordSet[	0] + " " +wordSet[1];
- 		if(biMap.has(temp)){
- 			biMap.set(temp,biMap.get(temp)+1);
- 		}else{
- 			biMap.set(temp,1);
- 		}
- 	})
- 	var i=0;
- 	for (var [key, value] of biMap) {
-  		indexWord(key,value,'bi',i,videoId);
-  		i++;
-	}
-}
-
-function indexWord(key,value,type,i,videoId)
-{	
-	if(val<value){
-		val=value;
-		k=key;
-	}
-	
-	client.index({
-	 	index: 'caption_you',
-     	id: videoId+":"+type+":"+i,
-     	type: 'wordCount',
-     	body: { 
-         	"words": key,
-         	"count": value,
-         	"videoId":videoId,
-     	}
 	});
 }
