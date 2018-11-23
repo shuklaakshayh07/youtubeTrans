@@ -7,4 +7,4 @@ form(action="/search",method="post")
         input(type='submit',value='Search')
     ul
       each tag in tags
-        li #{tag}
+        li a.taglink(href="/searchVideoByTag/"+tag) #{tag}

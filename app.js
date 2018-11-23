@@ -28,7 +28,7 @@ app.get('/mainPage',routes.mainPage);
 app.post('/search', routes.searchVideo);
 app.get('/searchVideoByTag/:tag', routes.searchVideoTag);
 
-// app.post('/search(/*)?',routes.searchVideoByTag);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

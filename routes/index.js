@@ -142,6 +142,8 @@ exports.searchVideoTag= function(req,res){
         temp["videoId"]=response.hits.hits[0]._source.videoId;
         temp["title"]=response.hits.hits[0]._source.title;
         temp["description"]=response.hits.hits[0]._source.description;
+        temp["transcript"]=response.hits.hits[0]._source.transcript;
+
         // console.log("temp",temp);
         result.push(temp);
         if(i==videoIdCount)
@@ -160,6 +162,9 @@ exports.searchVideoTag= function(req,res){
   });
   // res.render('search', { title:  tag });
 };
+exports.showTranscript=function(){
+  console.log($('.viewMore'));
+}
 
 
 exports.searchVideo=function(req,res){ 
@@ -230,11 +235,13 @@ exports.searchVideo=function(req,res){
    		 }
    		 else{	
    		 	var videoIdCount = videoIds.length;
-   		 		// console.log(response.hits.hits);
+   		 		console.log(response.hits.hits[0]._source);
    		 	var temp = {};
     		temp["videoId"]=response.hits.hits[0]._source.videoId;
     		temp["title"]=response.hits.hits[0]._source.title;
     		temp["description"]=response.hits.hits[0]._source.description;
+        temp["thumbnail"]=response.hits.hits[0]._source.thumbnails;
+        temp["transcript"]=response.hits.hits[0]._source.transcript;
     		// console.log("temp",temp);
     		result.push(temp);
     		if(i==videoIdCount)

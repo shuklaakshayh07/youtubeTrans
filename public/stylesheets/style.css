@@ -2,7 +2,32 @@ body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
-
 a {
   color: #00B7FF;
+}
+a.taglink
+  {cursor:pointer
+  position:relative
+  display:inline-block
+  width:30%
+  margin:5px
+  height:165px
+  overflow:hidden
+  word-wrap:break-word
+  vertical-align:top
+  text-align:left
+  text-decoration:none
+  color:#000
+  border-radius:0px
+  padding:6px
+}
+div.videofetch
+{
+	border-radius: 2px;
+	position: relative;
+	border-color: black;
+	width: 50%;
+	height: 165px;
+	text-align: left;
+
 }
