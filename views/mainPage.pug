@@ -1,13 +1,23 @@
-form.search-form(action="/search", method="post")
-	a.btn.btn-link(onClick="$('form.search-form').submit();", style="color:#aaa;position:absolute;left:175px;top:10px;z-index:1")
-	input.search-box.form-control.typeahead(type="text", placeholder="Search For Videos", value=search_query, required="required" name='search_query')
-	input(type="submit", value="Search")
-h1 Top Tags
-ul
-	each tag in tags
-		li #{tag}
+extends layout
 
-span.row
+block content
+	div.topBar.col-xs-12(style="background-color:#A0E6F6;position: absolute;top:0;left:0;right:0;")
+		h1 Youtube Entity Extraction
+	h3(style="margin-left:25px;margin-top:100px") Search For Videos, Tags Or Transcript:
+	div.searchpanel.col-xs-12(style="margin-bottom:40px;")
+		form.search-form.col.xs-12(action="/search", method="post",style="margin-left:25px")
+			span.col.xs-12
+				input.search-box.form-control.typeahead.col-xs-11(type="text", placeholder="Search For Videos", value=search_query, required="required" name='search_query',style="width:50%;")
+				| &nbsp;
+				input.col-xs-1(type="submit", value="Search",style="padding:5px;")
+	h3(style="margin-left:25px;") Top Tags
+		|   &nbsp;&nbsp;&nbsp;
+	div.topTagsPanel.col-xs-12
+		span.col.xs-10
+			each tag in tags
+				button.btn.btn-info(style="margin:20px;") #{tag}	
+
+	span.row
 	each video in videos
 		span.col-xs-3
 		a(href='/showVideo/'+video.videoId)
