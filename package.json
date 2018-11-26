@@ -22,6 +22,14 @@
     "request": "^2.88.0",
     "jquery": "2.1.1",
     "popper.js": "1.14.4",
+    "browserify": "16.2.2",
+    "browserify-shim": "3.8.14",
     "bootstrap": "4.1.3"
+  },
+  "browserify-shim": {
+    "jquery": "GLOBAL:$"
+  },
+  "browserify": {
+    "transform": "browserify-shim"
   }
 }

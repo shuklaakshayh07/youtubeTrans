@@ -12,9 +12,11 @@ block content
 							br
 						div.dropdown.col-xs-1(style="margin-top:25px")
 							span.transcriptloader
-								button.btn.btn-info(onClick="showTranscript();") Get Transcript
+								-var videoId=link.videoId
+								button.btn.btn-info(onClick="showTranscript('"+link.videoId+"')") Get Transcript
 						| &nbsp
-						div.viewMore.col-xs-12.hide
+						-var transcriptDiv = "viewMore-"+link.videoId;
+						div.col-xs-12.hide.viewMore(id=transcriptDiv)
 							div.SearchTrans.col-xs-3(style="float:right;padding:0px;")
 								form(action="/search",method="post")
 									p
