@@ -1,10 +1,10 @@
-h1 Top Tags
 form(action="/search",method="post")
     p
         label Enter New Task
         input(type='text',placeholder='Search for videos',name='search_query')
     p
         input(type='submit',value='Search')
+    h1 Top Tags
     ul
       each tag in tags
-        li a.taglink(href="/searchVideoByTag/"+tag) #{tag}
+        li #{tag}
