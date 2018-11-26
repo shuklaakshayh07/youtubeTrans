@@ -27,7 +27,7 @@ exports.mainPage = function(req,res){
 		type: 'entities',
 		body: {
 			sort: [{ "frequency": { "order": "desc" } }],
-			size: 100,
+			size: 1000,
 			query: { match_all: {}}
 		}
 	},function (error, response,status) {
@@ -41,7 +41,7 @@ exports.mainPage = function(req,res){
 				}
 			});
 
-			result = result.slice(0,10);
+			result = result.slice(0,25);
             var videos = [];
 			client.search({
 				index: 'youtube_entities',
