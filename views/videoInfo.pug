@@ -10,7 +10,7 @@ block content
 	div.transcript.col-xs-12
 		div.SearchTrans.col-xs-4(style="float:right;padding:0px;")
 			p
-				label Enter Keyword(s) :
+				label Enter Keyword :
 				input.search-box(type='text',id="search-"+data.videoId,placeholder='Search in transcript',name='search_query',style="padding:5px")
 				i.fa.fa-times(aria-hidden='true')(style="font-size:15px;left:-20px;position: relative;")(onClick="clearSearchText()")
 				button.btn.btn-info(onClick="highlightWord('"+data.videoId+

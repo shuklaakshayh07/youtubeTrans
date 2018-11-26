@@ -26,7 +26,7 @@ block content
 						div.transcript.col-xs-12
 							div.SearchTrans.col-xs-4(style="float:right;padding:0px;")
 							p
-								label Enter Keyword(s) :
+								label Enter Keyword :
 								input.search-box(type='text',id="search-"+link.videoId,placeholder='Search in transcript',name='search_query',style="padding:5px")
 								i.fa.fa-times(aria-hidden='true')(style="font-size:15px;left:-20px;position: relative;")(onClick="clearSearchText()")
 								button.btn.btn-info(onClick="highlightWord('"+link.videoId+
@@ -36,4 +36,5 @@ block content
 						div.entities.col-xs-12
 							p(style="font-weight:bold") ENTITIES
 							each tag in link.entities
-								li.col-xs-3 #{tag}
+								a(href='/searchVideoByTag/'+tag)
+									li.col-xs-3 #{tag}
