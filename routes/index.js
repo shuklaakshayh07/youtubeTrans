@@ -197,7 +197,7 @@ exports.searchVideo = function(req,res){
 						temp["entities"] = response.hits.hits[0]._source.entities.split(",");
 						result.push(temp);
 						if(i == videoIdCount){
-							res.render('search',{links:result}); 
+							res.render('search',{links:result,term:queryTerm}); 
 						}
 						else{
 							i++
