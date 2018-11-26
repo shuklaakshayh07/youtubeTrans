@@ -28,7 +28,7 @@ block content
 							p
 								label Enter Keyword :
 								input.search-box(type='text',id="search-"+link.videoId,placeholder='Search in transcript',name='search_query',style="padding:5px")
-								i.fa.fa-times(aria-hidden='true')(style="font-size:15px;left:-20px;position: relative;")(onClick="clearSearchText()")
+								i.fa.fa-times(aria-hidden='true')(style="font-size:15px;left:-20px;position: relative;")(onClick="clearSearchText('"+link.videoId+"')")
 								button.btn.btn-info(onClick="highlightWord('"+link.videoId+
 								"')",style="display:inline;margin:5px;") Search
 						div.transcript.col-xs-12(id="transcript-"+link.videoId)

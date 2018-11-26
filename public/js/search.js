@@ -36,8 +36,11 @@ var highlightWord = function(id){
 
 window.clearSearchText = clearSearchText;
 
-var clearSearchText = function(){
+var clearSearchText = function(id){
     $('.search-box').val("");
+ 	var transcript = ""+String($("#transcript-"+id).html());
+	transcript = resetFormatting(transcript);   
+	$("#transcript-"+id).find("p").replaceWith(transcript);
 }
 
 var resetFormatting = function(temp){
