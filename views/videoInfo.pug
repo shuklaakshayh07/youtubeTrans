@@ -1,6 +1,8 @@
 extends layout
 	
 block content
+	a(href='/')
+		i.fa.fa-home(aria-hidden='true')(style="font-size:30px")
 	h1 VIDEO INFO
 	div.videoTitle.col-xs-7(style="padding-left:0px")
 		a(style='line-height:50px;font-size:20px;color:#000000;margin-left:5px;text-decoration:none')(href="https://www.youtube.com/watch?v="+data.videoId target="_blank") #{data.title}
