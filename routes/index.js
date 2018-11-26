@@ -145,7 +145,7 @@ exports.searchVideo = function(req,res){
 			sort: [{ "frequency": { "order": "desc" } }],
 			size: 50,
 			query: {
-				match: {
+				term: {
 					"text": queryTerm
 				}
 			}
