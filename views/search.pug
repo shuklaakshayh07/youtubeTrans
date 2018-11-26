@@ -5,7 +5,7 @@ block content
 		div#searchMain
 			each link in links
 				div.videofetch.col-xs-12(style="background-color:#CFCECD;margin-bottom:10px;padding:0px")
-						div.videoResult.col-xs-2(style="padding:0px;")
+						div.videoResult.col-xs-2(style="padding:0px;margin-left:60px")
 							img.className#IdName(src=link.thumbnail alt="Image Title")
 						div.videoTitle.col-xs-7(style="padding-left:0px")
 							a(style='line-height:50px;font-size:20px;color:#000000;margin-left:5px;text-decoration:none')(href="https://www.youtube.com/watch?v="+link.videoId target="_blank") #{link.title}
