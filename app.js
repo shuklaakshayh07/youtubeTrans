@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', routes.index);
+app.get('/', routes.mainPage);
 app.get('/about',routes.about);
 app.use('/users', usersRouter);
 app.get('/mainPage',routes.mainPage);
