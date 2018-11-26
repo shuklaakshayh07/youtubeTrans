@@ -10,16 +10,18 @@ block content
 				input.search-box.form-control.typeahead.col-xs-11(type="text", placeholder="Search For Videos", value=search_query, required="required" name='search_query',style="width:50%;")
 				| &nbsp;
 				input.col-xs-1(type="submit", value="Search",style="padding:5px;")
+				i.fa.fa-times(aria-hidden='true')(style="font-size: 20px;left: -140px;position: relative;top: 5px;")(onClick="clearSearchText()")
 	h3(style="margin-left:25px;") Top Tags
 		|   &nbsp;&nbsp;&nbsp;
 	div.topTagsPanel.col-xs-12
 		span.col.xs-10
 			each tag in tags
-				button.btn.btn-info(style="margin:20px;") #{tag}	
-
+				a(href='/searchVideoByTag/'+tag)
+					button.btn.btn-info(style="margin:20px;") #{tag}	
+	
+	h3(style="margin-left:25px;") Videos
 	span.row
-	each video in videos
-		div.col-xs-3
-			a(href='/showVideo/'+video.videoId)
-				img(src=video.thumbnail alt="'+video.title+'")(style="object-fit:cover;width:200px;height:150px;margin:20px")
-			p #{video.title}
+		each video in videos
+			span.col-xs-2
+				a(href='/showVideo/'+video.videoId)
+					img(src=video.thumbnail alt="'+video.title+'")(style="object-fit:cover;width:200px;height:150px;margin:10px")

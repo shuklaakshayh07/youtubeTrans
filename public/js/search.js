@@ -34,6 +34,12 @@ var highlightWord = function(id){
 	$("#transcript-"+id).find("p").replaceWith(result);
 }
 
+window.clearSearchText = clearSearchText;
+
+var clearSearchText = function(){
+    $('.search-box').val("");
+}
+
 var resetFormatting = function(temp){
 	var transcript = "";
 	var index = temp.indexOf("<mark>");
