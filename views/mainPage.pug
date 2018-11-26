@@ -16,3 +16,10 @@ block content
 		span.col.xs-10
 			each tag in tags
 				button.btn.btn-info(style="margin:20px;") #{tag}	
+
+	span.row
+	each video in videos
+		div.col-xs-3
+			a(href='/showVideo/'+video.videoId)
+				img(src=video.thumbnail alt="'+video.title+'")(style="object-fit:cover;width:200px;height:150px;margin:20px")
+			p #{video.title}

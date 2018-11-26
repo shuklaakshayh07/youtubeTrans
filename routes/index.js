@@ -42,7 +42,6 @@ exports.mainPage = function(req,res){
 			});
 
 			result = result.slice(0,10);
-			console.log(result);
             var videos = [];
 			client.search({
 				index: 'youtube_entities',
@@ -62,7 +61,6 @@ exports.mainPage = function(req,res){
 };
 
 exports.showVideo = function(req,res){
-	console.log("show video");
 	var url = req.url;
 	var index = url.lastIndexOf('/');
 	var videoId = url.slice(index + 1);
@@ -162,10 +160,6 @@ exports.searchVideoTag = function(req,res){
 	});
 };
 
-exports.showTranscript = function(){
-	console.log($('.viewMore'));
-}
-
 exports.searchVideo = function(req,res){ 
 	var url = req.url;
 	var result = [];
@@ -248,23 +242,3 @@ exports.searchVideo = function(req,res){
 		}
 	});
 };
-
-var displayAllVideos = function(){
-	console.log("displayAllVideos");
-	var videos = [];
-	return client.search({
-		index: 'youtube_entities',
-		type: 'youtube_meta',
-		body: {
-			sort: [{ "createdAt": { "order": "desc" } }],
-			size: 50
-		}
-	}).then(function(response) {
-		response.hits.hits.forEach(function(doc){
-			videos.push(doc._source);
-		})
-		return videos;
-	}).catch(function(error) {
-		console.log('error while getting the doc in ES', error.toString());
-	});
-}
