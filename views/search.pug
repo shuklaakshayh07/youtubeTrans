@@ -1,36 +1,38 @@
 extends layout
 	
 block content
-		a(href='/')
+	div.topBar.col-xs-12(style="background-color:#A0E6F6;position: absolute;top:0;left:0;right:0;")
+		a.col-xs-1(href='/',style="padding-right:0px;margin-top:20px")
 			i.fa.fa-home(aria-hidden='true')(style="font-size:30px")
-		h1(style="margin-bottom:50px;margin-top:5px") Search Results for #{term}
-		div#searchMain
-			each link in links
-				div.videofetch.col-xs-12(style="background-color:#D3D3D3;margin-bottom:10px;padding:0px")
-						div.videoResult.col-xs-2(style="padding:0px")
-							img.className#IdName(src=link.thumbnail,alt="Image Title",style="margin-left:50px")
-						div.videoTitle.col-xs-7(style="padding-left:0px")
-							a(style='line-height:50px;font-size:20px;color:#000000;margin-left:5px;text-decoration:none')(href="https://www.youtube.com/watch?v="+link.videoId target="_blank") #{link.title}
-							br
-						div.dropdown.col-xs-1(style="margin-top:25px")
-							span.transcriptloader
-								-var videoId=link.videoId
-								button.btn.btn-info(onClick="showTranscript('"+link.videoId+"')") Show Details
-						| &nbsp
-						-var transcriptDiv = "viewMore-"+link.videoId;
-						div.col-xs-12.hide.viewMore(id=transcriptDiv)
-							div.iframe.col-xs-offset-3.col-xs-6(style="margin-top:20px")
-								iframe(width='560', height='315', src='https://www.youtube.com/embed/'+link.videoId, frameborder='0')
-							div.transcript.col-xs-12
-								div.SearchTrans.col-xs-4(style="float:right;padding:0px;")
-								p
-									label Enter Keyword(s) :
-									input(type='text',id="search-"+link.videoId,placeholder='Search in transcript',name='search_query',style="padding:5px")
-									button.btn.btn-info(onClick="highlightWord('"+link.videoId+
-									"')",style="display:inline;margin:5px;") Search
-							div.transcript.col-xs-12(id="transcript-"+link.videoId)
-								p #{link.transcript}
-							div.entities.col-xs-12
-								p(style="font-weight:bold") ENTITIES
-								each tag in link.entities
-									li.col-xs-3 #{tag}
+		h3.col.xs-10 Youtube Entity Extraction	
+	h1(style="margin-bottom:30px;margin-top:100px;margin-left:50px") Search Results for #{term}:
+	div#searchMain
+		each link in links
+			div.videofetch.col-xs-12(style="background-color:#D3D3D3;margin-bottom:10px;padding:0px")
+					div.videoResult.col-xs-2(style="padding:0px")
+						img.className#IdName(src=link.thumbnail,alt="Image Title",style="margin-left:50px")
+					div.videoTitle.col-xs-7(style="padding-left:0px")
+						a(style='line-height:50px;font-size:20px;color:#000000;margin-left:5px;text-decoration:none')(href="https://www.youtube.com/watch?v="+link.videoId target="_blank") #{link.title}
+						br
+					div.dropdown.col-xs-1(style="margin-top:25px")
+						span.transcriptloader
+							-var videoId=link.videoId
+							button.btn.btn-info(onClick="showTranscript('"+link.videoId+"')") Show Details
+					| &nbsp
+					-var transcriptDiv = "viewMore-"+link.videoId;
+					div.col-xs-12.hide.viewMore(id=transcriptDiv)
+						div.iframe.col-xs-offset-3.col-xs-6(style="margin-top:20px")
+							iframe(width='560', height='315', src='https://www.youtube.com/embed/'+link.videoId, frameborder='0')
+						div.transcript.col-xs-12
+							div.SearchTrans.col-xs-4(style="float:right;padding:0px;")
+							p
+								label Enter Keyword(s) :
+								input(type='text',id="search-"+link.videoId,placeholder='Search in transcript',name='search_query',style="padding:5px")
+								button.btn.btn-info(onClick="highlightWord('"+link.videoId+
+								"')",style="display:inline;margin:5px;") Search
+						div.transcript.col-xs-12(id="transcript-"+link.videoId)
+							p #{link.transcript}
+						div.entities.col-xs-12
+							p(style="font-weight:bold") ENTITIES
+							each tag in link.entities
+								li.col-xs-3 #{tag}
