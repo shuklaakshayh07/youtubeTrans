@@ -6,3 +6,9 @@ h1 Top Tags
 ul
 	each tag in tags
 		li #{tag}
+
+span.row
+	each video in videos
+		span.col-xs-3
+		a(href='/showVideo/'+video.videoId)
+			img(src=video.thumbnail alt="'+video.title+'")(style="object-fit:cover;width:200px;height:150px;margin:20px")

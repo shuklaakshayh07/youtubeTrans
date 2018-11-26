@@ -43,15 +43,55 @@ exports.mainPage = function(req,res){
 
 			result = result.slice(0,10);
 			console.log(result);
-		 	res.render('mainPage',{tags:result}); 
+            var videos = [];
+			client.search({
+				index: 'youtube_entities',
+				type: 'youtube_meta',
+				body: {
+					sort: [{ "createdAt": { "order": "desc" } }],
+					size: 50
+				}
+			}).then(function(resp) {
+				resp.hits.hits.forEach(function(doc){
+					videos.push(doc._source);
+				});
+				res.render('mainPage',{tags:result,videos:videos}); 
+			});
 		}
 	});
 };
 
+exports.showVideo = function(req,res){
+	console.log("show video");
+	var url = req.url;
+	var index = url.lastIndexOf('/');
+	var videoId = url.slice(index + 1);
+	client.search({
+		index: 'youtube_entities',
+		type: 'youtube_meta',
+			body: {
+				query: {
+					match: {
+						"videoId": videoId
+					}
+				}	
+			}
+	},function(error,response,status) {
+		if(error){
+			console.log("ES search error",error);
+		}
+		else{
+			var data = response["hits"]["hits"][0]["_source"];
+			data.entities = data.entities.split(",");
+			res.render('videoInfo',{data:data}); 
+		}
+	});
+}
+
 exports.searchVideoTag = function(req,res){
 	var url = req.url;
 	var index = url.lastIndexOf('/');
-	var queryTerm = url.slice(index+1);
+	var queryTerm = url.slice(index + 1);
 	var result = [];
 	var videoIds = [];
 	client.search({

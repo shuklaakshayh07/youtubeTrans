@@ -26,6 +26,7 @@ app.get('/about',routes.about);
 app.use('/users', usersRouter);
 app.get('/mainPage',routes.mainPage);
 app.post('/search', routes.searchVideo);
+app.get('/showVideo/:videoId', routes.showVideo);
 app.get('/searchVideoByTag/:tag', routes.searchVideoTag);
 
 
