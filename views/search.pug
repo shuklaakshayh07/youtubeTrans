@@ -5,7 +5,7 @@ block content
 		div#searchMain
 			each link in links
 				div.videofetch.col-xs-12(style="background-color:#CFCECD;margin-bottom:10px;padding:0px")
-						div.videoResult.col-xs-2(style="padding:0px;")
+						div.videoResult.col-xs-2(style="padding:0px;margin-left:60px")
 							img.className#IdName(src=link.thumbnail alt="Image Title")
 						div.videoTitle.col-xs-7(style="padding-left:0px")
 							a(style='line-height:50px;font-size:20px;color:#000000;margin-left:5px;text-decoration:none')(href="https://www.youtube.com/watch?v="+link.videoId target="_blank") #{link.title}
@@ -17,18 +17,19 @@ block content
 						| &nbsp
 						-var transcriptDiv = "viewMore-"+link.videoId;
 						div.col-xs-12.hide.viewMore(id=transcriptDiv)
-							div.SearchTrans.col-xs-4(style="float:right;padding:0px;")
-								p
-									label Enter Keyword(s) :
-									input(type='text',id="search-"+link.videoId,placeholder='Search in transcript',name='search_query',style="padding:5px")
-									button.btn.btn-info(onClick="highlightWord('"+link.videoId+
-									"')",style="display:inline;margin:5px;") Search
-							div.transcript.col-xs-12(id="transcript-"+link.videoId)
-								p #{link.transcript}
+							div.transcript.col-xs-
+								div.SearchTrans.col-xs-4(style="float:right;padding:0px;")
+									p
+										label Enter Keyword(s) :
+										input(type='text',id="search-"+link.videoId,placeholder='Search in transcript',name='search_query',style="padding:5px")
+										button.btn.btn-info(onClick="highlightWord('"+link.videoId+
+										"')",style="display:inline;margin:5px;") Search
+								div.transcript.col-xs-12(id="transcript-"+link.videoId)
+									p #{link.transcript}
 							div.iframe.col-xs-4(style="margin-top:20px")
 								iframe(width='560', height='315', src='https://www.youtube.com/embed/'+link.videoId, frameborder='0')
 							div.entities.col-xs-12(style="margin-top:30px")
-							p(style="font-weight:bold") ENTITIES
-								each tag in link.entities
-									li #{tag}
+								p(style="font-weight:bold") ENTITIES
+									each tag in link.entities
+										li #{tag}
 
