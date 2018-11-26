@@ -1,6 +1,8 @@
 extends layout
 	
 block content
+		a(href='/')
+			i.fa.fa-home(aria-hidden='true')(style="font-size:30px")
 		h1(style="margin-bottom:50px;margin-top:5px") Search Results for #{term}
 		div#searchMain
 			each link in links
@@ -17,19 +19,18 @@ block content
 						| &nbsp
 						-var transcriptDiv = "viewMore-"+link.videoId;
 						div.col-xs-12.hide.viewMore(id=transcriptDiv)
-							div.transcript.col-xs-
-								div.SearchTrans.col-xs-4(style="float:right;padding:0px;")
-									p
-										label Enter Keyword(s) :
-										input(type='text',id="search-"+link.videoId,placeholder='Search in transcript',name='search_query',style="padding:5px")
-										button.btn.btn-info(onClick="highlightWord('"+link.videoId+
-										"')",style="display:inline;margin:5px;") Search
-								div.transcript.col-xs-12(id="transcript-"+link.videoId)
-									p #{link.transcript}
-							div.iframe.col-xs-4(style="margin-top:20px")
+							div.iframe.col-xs-offset-3.col-xs-6(style="margin-top:20px")
 								iframe(width='560', height='315', src='https://www.youtube.com/embed/'+link.videoId, frameborder='0')
-							div.entities.col-xs-12(style="margin-top:30px")
+							div.transcript.col-xs-12
+								div.SearchTrans.col-xs-4(style="float:right;padding:0px;")
+								p
+									label Enter Keyword(s) :
+									input(type='text',id="search-"+link.videoId,placeholder='Search in transcript',name='search_query',style="padding:5px")
+									button.btn.btn-info(onClick="highlightWord('"+link.videoId+
+									"')",style="display:inline;margin:5px;") Search
+							div.transcript.col-xs-12(id="transcript-"+link.videoId)
+								p #{link.transcript}
+							div.entities.col-xs-12
 								p(style="font-weight:bold") ENTITIES
-									each tag in link.entities
-										li #{tag}
-
+								each tag in link.entities
+									li.col-xs-3 #{tag}
