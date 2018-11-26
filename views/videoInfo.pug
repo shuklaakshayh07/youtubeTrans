@@ -20,4 +20,5 @@ block content
 	div.entities.col-xs-12
 		p(style="font-weight:bold") ENTITIES
 		each tag in data.entities
-			li.col-xs-3 #{tag}
+			a(href='/searchVideoByTag/'+tag)
+				li.col-xs-3 #{tag}
