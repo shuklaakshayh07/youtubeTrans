@@ -15,11 +15,11 @@ block content
 				i.fa.fa-times(aria-hidden='true')(style="font-size: 20px;left: -140px;position: relative;top: 5px;")(onClick="clearSearchText()")
 	h3(style="margin-left:25px;") Top Tags
 		|   &nbsp;&nbsp;&nbsp;
-	div.topTagsPanel.col-xs-12
+	div.topTagsPanel.col-xs-12(style="margin-bottom:20px")
 		span.col.xs-10
 			each tag in tags
 				a(href='/searchVideoByTag/'+tag)
-					button.btn.btn-info(style="margin:20px;") #{tag}	
+					button.btn.btn-info(style="margin:10px;") #{tag}	
 	
 	h3(style="margin-left:25px;") Videos
 	span.row

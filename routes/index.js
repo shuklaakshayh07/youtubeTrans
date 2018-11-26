@@ -41,7 +41,7 @@ exports.mainPage = function(req,res){
 				}
 			});
 
-			result = result.slice(0,25);
+			result = result.slice(0,32);
             var videos = [];
 			client.search({
 				index: 'youtube_entities',
