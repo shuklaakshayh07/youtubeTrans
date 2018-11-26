@@ -1,12 +1,11 @@
 extends layout
 	
 block content
-	a(href='/')
-		i.fa.fa-home(aria-hidden='true')(style="font-size:30px")
-	h1 VIDEO INFO
-	div.videoTitle.col-xs-7(style="padding-left:0px")
+	div.videoTitle.col-xs-12(style="background-color:#A0E6F6;position:absolute;top:0;left:0;right:0;")
+		a(href='/')
+			i.fa.fa-home(aria-hidden='true')(style="font-size:30px;color:#000000")
 		a(style='line-height:50px;font-size:20px;color:#000000;margin-left:5px;text-decoration:none')(href="https://www.youtube.com/watch?v="+data.videoId target="_blank") #{data.title}
-	div.iframe.col-xs-offset-1.col-xs-6(style="margin-top:20px")
+	div.iframe.col-xs-offset-1.col-xs-6(style="margin-top:80px")
 		iframe(width='560', height='315', src='https://www.youtube.com/embed/'+data.videoId, frameborder='0')
 	div.transcript.col-xs-12
 		div.SearchTrans.col-xs-4(style="float:right;padding:0px;")
