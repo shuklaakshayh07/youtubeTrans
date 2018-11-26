@@ -1,11 +1,11 @@
 extends layout
 	
 block content
-		h1(style="margin-bottom:50px;margin-top:5px;border-bottom:2px solid black;background-color:#A0E6F6") Search Result for Keywords:
+		h1(style="margin-bottom:50px;margin-top:5px") Search Results:
 		div#searchMain
 			each link in links
-				div.videofetch.col-xs-12(style="background-color:#CFCECD;margin-bottom:10px")
-						div.videoResult.col-xs-2(style="padding-right:0px;margin-left:10px")
+				div.videofetch.col-xs-12(style="background-color:#CFCECD;margin-bottom:10px;padding:0px")
+						div.videoResult.col-xs-2(style="padding:0px;")
 							img.className#IdName(src=link.thumbnail alt="Image Title")
 						div.videoTitle.col-xs-8(style="padding-left:0px")
 							a(style='line-height:50px;font-size:20px;text-align:justify;color:#000000;margin-left:5px;text-decoration:none')(href="https://www.youtube.com/watch?v="+link.videoId) #{link.title}
