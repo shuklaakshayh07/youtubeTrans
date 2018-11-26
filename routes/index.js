@@ -27,7 +27,7 @@ exports.mainPage=function(req,res){
 		type: 'entities',
 		body: {
 			sort: [{ "frequency": { "order": "desc" } }],
-			size: 30,
+			size: 100,
 			query: { match_all: {}}
 		}
 	},function (error, response,status) {
