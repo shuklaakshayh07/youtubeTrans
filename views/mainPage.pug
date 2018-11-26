@@ -1,7 +1,7 @@
 form.search-form(action="/search", method="post")
 	a.btn.btn-link(onClick="$('form.search-form').submit();", style="color:#aaa;position:absolute;left:175px;top:10px;z-index:1")
 	input.search-box.form-control.typeahead(type="text", placeholder="Search For Videos", value=search_query, required="required" name='search_query')
-	input(type="submit", value="Search", style="height:0;width:0;position:absolute;top:-1000px")
+	input(type="submit", value="Search")
 h1 Top Tags
 ul
 	each tag in tags

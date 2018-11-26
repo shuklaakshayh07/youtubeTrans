@@ -189,11 +189,12 @@ exports.searchVideo = function(req,res){
 			 		else{	
 						var videoIdCount = videoIds.length;
 						var temp = {};
-						temp["videoId"]=response.hits.hits[0]._source.videoId;
-						temp["title"]=response.hits.hits[0]._source.title;
-						temp["description"]=response.hits.hits[0]._source.description;
-						temp["thumbnail"]=response.hits.hits[0]._source.thumbnail;
-						temp["transcript"]=response.hits.hits[0]._source.transcript;
+						temp["videoId"] = response.hits.hits[0]._source.videoId;
+						temp["title"] = response.hits.hits[0]._source.title;
+						temp["description"] = response.hits.hits[0]._source.description;
+						temp["thumbnail"] = response.hits.hits[0]._source.thumbnail;
+						temp["transcript"] = response.hits.hits[0]._source.transcript;
+						temp["entities"] = response.hits.hits[0]._source.entities.split(",");
 						result.push(temp);
 						if(i == videoIdCount){
 							res.render('search',{links:result}); 

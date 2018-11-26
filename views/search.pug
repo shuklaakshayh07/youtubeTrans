@@ -19,11 +19,15 @@ block content
 						| &nbsp
 						-var transcriptDiv = "viewMore-"+link.videoId;
 						div.col-xs-12.hide.viewMore(id=transcriptDiv)
-							div.SearchTrans.col-xs-3(style="float:right;padding:0px;")
-								form(action="/search",method="post")
+							div.transcript.col-xs-8
+								div.SearchTrans.col-xs-12(style="float:left;padding:0px;margin-top:15px")
+									form(action="/search",method="post")
 									p
 										label Enter Keyword(s) :
 										input(type='text',placeholder='Search in transcript',name='search_query')
 										input(type='submit',value='Search')
-							div.transcript.col-xs-12
 								p #{link.transcript}
+							div.entities.col-xs-4(style="margin-top:30px")
+							p(style="font-weight:bold") ENTITIES
+								each tag in link.entities
+									li #{tag}
