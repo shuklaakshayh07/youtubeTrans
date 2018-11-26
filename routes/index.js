@@ -16,18 +16,18 @@ exports.index = function(req, res){
 	res.render('index', { title: 'Youtube Transcript & Keywords' });
 };
 
-exports.about= function(req,res){
+exports.about = function(req,res){
 	res.render('index',{title:'about'});
 };
 
-exports.mainPage=function(req,res){
+exports.mainPage = function(req,res){
 	var result = [];
 	client.search({  
 		index: 'youtube_entities',
 		type: 'entities',
 		body: {
 			sort: [{ "frequency": { "order": "desc" } }],
-			size: 30,
+			size: 50,
 			query: { match_all: {}}
 		}
 	},function (error, response,status) {
@@ -48,9 +48,8 @@ exports.mainPage=function(req,res){
 	});
 };
 
-exports.searchVideoTag= function(req,res){
-	var url=req.url;
-	console.log("abc",url);
+exports.searchVideoTag = function(req,res){
+	var url = req.url;
 	var index = url.lastIndexOf('/');
 	var queryTerm = url.slice(index+1);
 	var result = [];
@@ -123,20 +122,20 @@ exports.searchVideoTag= function(req,res){
 	});
 };
 
-exports.showTranscript=function(){
+exports.showTranscript = function(){
 	console.log($('.viewMore'));
 }
 
-exports.searchVideo=function(req,res){ 
-	var url=req.url;
+exports.searchVideo = function(req,res){ 
+	var url = req.url;
 	var result = [];
 	var videoIds = [];
-	var queryTerm={};
+	var queryTerm = {};
 	if(url.lastIndexOf("/search?q=")!=-1){
-		queryTerm=url.slice(url.lastIndexOf("/search?q"));
+		queryTerm = url.slice(url.lastIndexOf("/search?q"));
 	}
-	if(url=="/search"){
-		queryTerm=req.body['search_query'];
+	if(url == "/search"){
+		queryTerm = req.body['search_query'];
 	}
 
 	client.search({
@@ -144,7 +143,7 @@ exports.searchVideo=function(req,res){
 		type: 'entities',
 		body: {
 			sort: [{ "frequency": { "order": "desc" } }],
-			size: 10,
+			size: 50,
 			query: {
 				match: {
 					"text": queryTerm
@@ -159,16 +158,16 @@ exports.searchVideo=function(req,res){
 			response.hits.hits.forEach(function(hit){
 				var count = videoIds.length;
 			 	var flag=false;
-				for(var i=0;i<=count;i++)
+				for(var i = 0;i <=count;i++)
 				{
-					if(videoIds[i]==hit._source.videoId){
-						flag=true;
+					if(videoIds[i] == hit._source.videoId){
+						flag = true;
 					}
 				}
 				if(!flag){
 					videoIds.push(hit._source.videoId);
 				}
-			})
+			});
 
 			var i = 1;
 			videoIds.forEach(function(videoId){
@@ -208,3 +207,23 @@ exports.searchVideo=function(req,res){
 		}
 	});
 };
+
+var displayAllVideos = function(){
+	console.log("displayAllVideos");
+	var videos = [];
+	return client.search({
+		index: 'youtube_entities',
+		type: 'youtube_meta',
+		body: {
+			sort: [{ "createdAt": { "order": "desc" } }],
+			size: 50
+		}
+	}).then(function(response) {
+		response.hits.hits.forEach(function(doc){
+			videos.push(doc._source);
+		})
+		return videos;
+	}).catch(function(error) {
+		console.log('error while getting the doc in ES', error.toString());
+	});
+}
