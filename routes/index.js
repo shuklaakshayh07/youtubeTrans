@@ -89,81 +89,12 @@ exports.showVideo = function(req,res){
 exports.searchVideoTag = function(req,res){
 	var url = req.url;
 	var index = url.lastIndexOf('/');
-	var queryTerm = url.slice(index + 1);
-	var result = [];
-	var videoIds = [];
-	client.search({
-		index: 'youtube_entities',
-		type: 'entities',
-			body: {
-				sort: [{ "frequency": { "order": "desc" } }],
-				size: 10,
-				query: {
-					match: {
-						"text": queryTerm
-					}
-				}	
-			}
-	},function (error, response,status) {
-		if (error){
-			console.log("search error: "+error)
-		}
-		else {
-			response.hits.hits.forEach(function(hit){
-				var count = videoIds.length;
-				var flag = false;
-				for(var i = 0;i <= count;i++)
-				{
-					if(videoIds[i] == hit._source.videoId){
-						flag = true;
-					}
-				}
-				if(!flag)
-					videoIds.push(hit._source.videoId);
-			});
-
-			var i = 1;
-			videoIds.forEach(function(videoId){
-				client.search({
-					index: 'youtube_entities',
-					type: 'youtube_meta',
-					body: {
-						size: 10,
-						query: {
-							match: {
-								"_id":videoId
-							}
-						}
-					}
-				},function (error, response,status) {
-					if (error){
-						console.log("search error: "+error)
-			 		}
-			 		else{  
-						var videoIdCount = videoIds.length;
-						var temp = {};
-						temp["videoId"]=response.hits.hits[0]._source.videoId;
-						temp["title"]=response.hits.hits[0]._source.title;
-						temp["description"]=response.hits.hits[0]._source.description;
-						temp["transcript"]=response.hits.hits[0]._source.transcript;
-						result.push(temp);
-						if(i == videoIdCount){
-						 	res.render('search',{links:result}); 
-						}
-						else{
-							i++
-						}
-					}      
-				})
-			})
-		}
-	});
+	var tag = url.slice(index + 1);
+	searchVideo(tag,req,res);
 };
 
 exports.searchVideo = function(req,res){ 
 	var url = req.url;
-	var result = [];
-	var videoIds = [];
 	var queryTerm = {};
 	if(url.lastIndexOf("/search?q=")!=-1){
 		queryTerm = url.slice(url.lastIndexOf("/search?q"));
@@ -171,7 +102,12 @@ exports.searchVideo = function(req,res){
 	if(url == "/search"){
 		queryTerm = req.body['search_query'];
 	}
+    searchVideo(queryTerm,req,res);
+};
 
+var searchVideo = function(queryTerm,req,res){
+	var result = [];
+	var videoIds = [];
 	client.search({
 		index: 'youtube_entities',
 		type: 'entities',
@@ -241,4 +177,4 @@ exports.searchVideo = function(req,res){
 			})
 		}
 	});
-};
+}
