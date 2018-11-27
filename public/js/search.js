@@ -1,5 +1,4 @@
 window.showTranscript = showTranscript;
-
 var showTranscript = function(id){
 	var transcriptDiv = "viewMore-"+id;
  	if($("#"+transcriptDiv).hasClass('hide')){
