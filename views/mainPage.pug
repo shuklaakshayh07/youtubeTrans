@@ -1,5 +1,7 @@
 extends layout
 
+block scripts
+	script(src="/js/mainpage.js")
 block content
 	div.topBar.col-xs-12(style="background-color:#A0E6F6;position: absolute;top:0;left:0;right:0;")
 		a.col-xs-1(href='/',style="padding-right:0px;margin-top:20px")
@@ -22,8 +24,9 @@ block content
 					button.btn.btn-info(style="margin:10px;") #{tag}	
 	
 	h3(style="margin-left:25px;") Videos
-	span.row
-		each video in videos
-			span.col-xs-2
-				a(href='/showVideo/'+video.videoId)
-					img(src=video.thumbnail alt="'+video.title+'")(style="object-fit:cover;width:190px;height:150px;margin:10px")
+	div.videosRow
+		span.row
+			each video in videos
+				span.col-xs-2
+					a(href='/showVideo/'+video.videoId)
+						img(src=video.thumbnail alt="'+video.title+'")(style="object-fit:cover;width:190px;height:150px;margin:10px")

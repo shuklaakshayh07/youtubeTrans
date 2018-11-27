@@ -6,9 +6,14 @@ window.addEventListener('scroll', function() {
    	console.log("trigger");
    	page++;
    	console.log(page);
+   	console.log($(".videosRow").html());
    	$.get("?page="+page).done(function(data){
+   		console.log("1st");
    		var newHtml=$(data);
-   		$(".row").html(newHtml[20]);		
+   		console.log("data",newHtml);
+   		// console.log($(".row"));
+   		$(".videosRow").html(newHtml[19]);		
    	})
+   	console.log("2nd");
    }
 });
