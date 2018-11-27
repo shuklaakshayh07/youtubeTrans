@@ -26,8 +26,8 @@ exports.mainPage = function(req,res){
 		index: 'youtube_entities',
 		type: 'entities',
 		body: {
-			sort: [{ "frequency": { "order": "desc" } }],
-			size: 1000,
+			sort:{ "frequency": { "order": "desc" } },
+			size: 200,
 			query: { match_all: {}}
 		}
 	},function (error, response,status) {
@@ -47,7 +47,7 @@ exports.mainPage = function(req,res){
 				index: 'youtube_entities',
 				type: 'youtube_meta',
 				body: {
-					sort: [{ "createdAt": { "order": "desc" } }],
+					sort:{ "createdAt": { "order": "desc" } },
 					size: 50
 				}
 			}).then(function(resp) {
@@ -112,13 +112,13 @@ var searchVideo = function(queryTerm,req,res){
 		index: 'youtube_entities',
 		type: 'entities',
 		body: {
-			sort: [{ "frequency": { "order": "desc" } }],
-			size: 50,
 			query: {
 				term: {
 					"text": queryTerm
 				}
-			}
+			},
+			sort:{ "frequency": { "order": "desc" } },
+			size: 50
 		}
 	},function (error, response,status) {
 		if (error){
