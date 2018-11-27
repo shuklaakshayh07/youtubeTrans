@@ -19,7 +19,7 @@ block content
 	div.topTagsPanel.col-xs-12(style="margin-bottom:20px")
 		span.col.xs-10
 			each tag in tags
-				a(href='/searchVideoByTag/'+tag)
+				a(href='/searchVideoByTag?tag='+tag)
 					button.btn.btn-info(style="margin:10px;") #{tag}	
 	
 	h3(style="margin-left:25px;") Videos

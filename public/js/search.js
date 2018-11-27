@@ -58,3 +58,15 @@ var resetFormatting = function(temp){
 	transcript += temp;
 	return transcript;
 }
+
+var page=1;
+window.showNextResults = showNextResults;
+var showNextResults = function(query){
+	console.log("query",query);
+	page++;
+	console.log(page);
+	$.get("/searchVideoByTag?tag="+query+"&page="+page).done(function(data){
+		var newHtml=$(data);
+		$("#searchMain").html(newHtml[15]);
+	});
+}
