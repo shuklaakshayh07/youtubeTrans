@@ -4,9 +4,11 @@ var showTranscript = function(id){
 	var transcriptDiv = "viewMore-"+id;
  	if($("#"+transcriptDiv).hasClass('hide')){
  		$("#"+transcriptDiv).removeClass('hide');
+ 		$('.showDetailsButton').html("Hide Details");
  	}
  	else{
- 		$("#"+transcriptDiv).addClass('hide');	
+ 		$("#"+transcriptDiv).addClass('hide');
+ 		$('.showDetailsButton').html("Show Details");
  	}
 }
 

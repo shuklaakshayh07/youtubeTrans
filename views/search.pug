@@ -17,7 +17,7 @@ block content
 					div.dropdown.col-xs-1(style="margin-top:25px")
 						span.transcriptloader
 							-var videoId=link.videoId
-							button.btn.btn-info(onClick="showTranscript('"+link.videoId+"')") Show Details
+							button.btn.btn-info.showDetailsButton(onClick="showTranscript('"+link.videoId+"')") Show Details
 					| &nbsp
 					-var transcriptDiv = "viewMore-"+link.videoId;
 					div.col-xs-12.hide.viewMore(id=transcriptDiv)
