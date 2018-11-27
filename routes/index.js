@@ -43,7 +43,7 @@ exports.mainPage = function(req,res){
 
 			result = result.slice(0,32);
 			var page;
-			console.log("param",req.query.page);
+			// console.log("param",req.query.page);
 			if(!req.query.page)
 				{req.query.page=1;
 				 page=1;
@@ -106,7 +106,7 @@ exports.searchVideoTag = function(req,res){
 exports.searchVideo = function(req,res){ 
 	var url = req.url;
 	var queryTerm = {};
-	console.log(req);
+	// console.log(req);
 	if(req.body){
 		queryTerm = url.slice(url.lastIndexOf("/search?q"));
 	}
@@ -120,6 +120,10 @@ var searchVideo = function(queryTerm,req,res){
 	var result = [];
 	var videoIds = [];
 	var totalSize = 8;
+	var totalPage; 
+	tagVideoCount(queryTerm,function(err,resp){
+		totalPage = Math.ceil(resp/8);
+	});
 	if(req.query.page)
 		totalSize = ((req.query.page))*8;
 	client.search({
@@ -181,7 +185,8 @@ var searchVideo = function(queryTerm,req,res){
 						temp["entities"] = response.hits.hits[0]._source.entities.split(",");
 						result.push(temp);
 						if(i == videoIdCount){
-							res.render('search',{links:result,term:queryTerm}); 
+							console.log("count before",totalPage);
+							res.render('search',{totalPage:totalPage,links:result,term:queryTerm}); 
 						}
 						else{
 							i++
@@ -192,3 +197,31 @@ var searchVideo = function(queryTerm,req,res){
 		}
 	});
 }
+
+var tagVideoCount = function(tag,callback){
+		// var tag = req.query.tag;
+		var count;
+		client.count({
+			index: 'youtube_entities',
+			type: 'entities',
+			body: {
+				query: {
+					match: {
+						"text": tag
+					}
+				}
+			}
+	},function (error, response,status) {
+		if (error){
+			console.log("search error: "+error)
+		}
+		else {
+			res=response.count;
+			console.log("in function",res);
+			// res.render(response.count);
+			callback(null,res);
+			// return response;
+		}
+
+
+	});}

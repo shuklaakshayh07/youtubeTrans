@@ -58,13 +58,24 @@ var resetFormatting = function(temp){
 }
 
 var page=1;
+var totalPage;
+$(document).ready(function(){
+	// totalPage=getCount();
+	console.log($)
+})
 window.showNextResults = showNextResults;
-var showNextResults = function(query){
-	console.log("query",query);
-	page++;
-	console.log(page);
-	$.get("/searchVideoByTag?tag="+query+"&page="+page).done(function(data){
-		var newHtml=$(data);
-		$("#searchMain").html(newHtml[15]);
-	});
+var showNextResults = function(totalPage,query){
+	if(totalPage>page){
+
+		console.log("query",query);
+		page++;
+		console.log(page);
+		$.get("/searchVideoByTag?tag="+query+"&page="+page).done(function(data){
+			var newHtml=$(data);
+			$("#searchMain").html(newHtml[15]);
+		});
+	}
+	else{
+		$('.viewMore').hide();
+	}
 }
