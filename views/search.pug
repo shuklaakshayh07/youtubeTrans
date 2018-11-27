@@ -10,9 +10,9 @@ block content
 		each link in links
 			div.videofetch.col-xs-12(style="background-color:#D3D3D3;margin-bottom:10px;padding:0px")
 					div.videoResult.col-xs-2(style="padding:0px")
-						img.className#IdName(src=link.thumbnail,alt="Image Title",style="margin-left:50px")
+						img.className#IdName(src=link.thumbnail,alt="Image Title",style="margin-left:50px;max-width:200px;object-fit:contain")
 					div.videoTitle.col-xs-7(style="padding-left:0px")
-						a(style='line-height:50px;font-size:20px;color:#000000;margin-left:5px;text-decoration:none')(href="https://www.youtube.com/watch?v="+link.videoId target="_blank") #{link.title}
+						a(style='line-height:50px;font-size:20px;color:#000000;margin-left:20px;text-decoration:none')(href="https://www.youtube.com/watch?v="+link.videoId target="_blank") #{link.title}
 						br
 					div.dropdown.col-xs-1(style="margin-top:25px")
 						span.transcriptloader
