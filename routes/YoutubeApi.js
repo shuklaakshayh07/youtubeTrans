@@ -3,6 +3,7 @@ var nGram = require('n-gram');
 var getYoutubeSubtitles = require('@joegesualdo/get-youtube-subtitles-node');
 var async = require('async');
 var request = require('request');
+var getSubtitles = require('youtube-captions-scraper').getSubtitles;
 
 var client = new elasticsearch.Client({});
 client.ping({
@@ -51,12 +52,14 @@ function fetchChannelVideos(functionCallback, channelId, nextPageToken) {
                 var flag = false;
 
                 //get transcript
-				getYoutubeSubtitles(video.videoId, {type: 'nonauto'})
-				.then(subtitles => { 
-					subtitles.forEach(function(sub){
-					  	transcript += sub.part + "";
-					});
+				getSubtitles({videoID: 'wJ9XOj17yow'})
+				.then(captions => { 
+  					captions.forEach(function(caption)
+  					{transcript+=caption.text+" ";
+  					 console.log(transcript);
+  					})
 			        var date = new Date().getTime();
+
 
 			        //process transcript
 			        var url = 'http://data.cube365.net/free/entity/extract';
