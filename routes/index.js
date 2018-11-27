@@ -56,7 +56,7 @@ exports.mainPage = function(req,res){
 				type: 'youtube_meta',
 				body: {
 					sort: [{ "createdAt": { "order": "desc" } }],
-					size: 10*page
+					size: 18*page
 				}
 			}).then(function(resp) {
 				resp.hits.hits.forEach(function(doc){
