@@ -131,7 +131,7 @@ var searchVideo = function(queryTerm,req,res){
 				}
 			},
 			sort:{ "frequency": { "order": "desc" } },
-			size: 50
+			size: totalSize
 		}
 	},function (error, response,status) {
 		if (error){
