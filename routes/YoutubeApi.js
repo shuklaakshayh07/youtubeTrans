@@ -41,7 +41,7 @@ function fetchChannelVideos(functionCallback, channelId, nextPageToken) {
 	     		tempObj["videoId"] = video.id["videoId"];
 	     		tempObj["title"] = video.snippet["title"];
 	     		tempObj["description"] = video.snippet["description"];
-	     		tempObj["thumbnails"] = video.snippet["thumbnails"]["default"]["url"];
+	     		tempObj["thumbnails"] = video.snippet["thumbnails"]["high"]["url"];
 	     		videos.push(tempObj);
 	     	})
 
@@ -57,7 +57,6 @@ function fetchChannelVideos(functionCallback, channelId, nextPageToken) {
 					  	transcript += sub.part + "";
 					});
 			        var date = new Date().getTime();
-
 			        //process transcript
 			        var url = 'http://data.cube365.net/free/entity/extract';
 				    var formData = {
