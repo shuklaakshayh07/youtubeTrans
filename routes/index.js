@@ -43,6 +43,7 @@ exports.mainPage = function(req,res){
 
 			result = result.slice(0,32);
 			var page;
+			console.log("param",req.query.page);
 			if(!req.query.page)
 				{req.query.page=1;
 				 page=1;
@@ -95,16 +96,18 @@ exports.showVideo = function(req,res){
 }
 
 exports.searchVideoTag = function(req,res){
-	var url = req.url;
-	var index = url.lastIndexOf('/');
-	var tag = url.slice(index + 1);
+	var tag = req.query.tag;
+	req.body['search_query'] = req.query.tag;
+	if(req.query.page)
+		req.body['page'] =req.query.page;
 	searchVideo(tag,req,res);
 };
 
 exports.searchVideo = function(req,res){ 
 	var url = req.url;
 	var queryTerm = {};
-	if(url.lastIndexOf("/search?q=")!=-1){
+	console.log(req);
+	if(req.body){
 		queryTerm = url.slice(url.lastIndexOf("/search?q"));
 	}
 	if(url == "/search"){
@@ -116,14 +119,17 @@ exports.searchVideo = function(req,res){
 var searchVideo = function(queryTerm,req,res){
 	var result = [];
 	var videoIds = [];
+	var totalSize = 8;
+	if(req.query.page)
+		totalSize = ((req.query.page))*8;
 	client.search({
 		index: 'youtube_entities',
 		type: 'entities',
 		body: {
 			sort: [{ "frequency": { "order": "desc" } }],
-			size: 50,
+			size: totalSize,
 			query: {
-				term: {
+				match: {
 					"text": queryTerm
 				}
 			}

@@ -27,7 +27,7 @@ app.use('/users', usersRouter);
 app.get('/mainPage',routes.mainPage);
 app.post('/search', routes.searchVideo);
 app.get('/showVideo/:videoId', routes.showVideo);
-app.get('/searchVideoByTag/:tag', routes.searchVideoTag);
+app.get('/searchVideoByTag', routes.searchVideoTag);
 
 
 // catch 404 and forward to error handler

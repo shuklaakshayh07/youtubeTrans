@@ -11,7 +11,6 @@ window.addEventListener('scroll', function() {
    		console.log("1st");
    		var newHtml=$(data);
    		console.log("data",newHtml);
-   		// console.log($(".row"));
    		$(".videosRow").html(newHtml[19]);		
    	})
    	console.log("2nd");
