@@ -42,13 +42,21 @@ exports.mainPage = function(req,res){
 			});
 
 			result = result.slice(0,32);
+			var page;
+			if(!req.query.page){
+				req.query.page=1;
+				page = 1;
+			}
+			else{
+				page = req.query.page;
+			}
             var videos = [];
 			client.search({
 				index: 'youtube_entities',
 				type: 'youtube_meta',
 				body: {
-					sort:{ "createdAt": { "order": "desc" } },
-					size: 50
+					sort: [{ "createdAt": { "order": "desc" } }],
+					size: 18 * page
 				}
 			}).then(function(resp) {
 				resp.hits.hits.forEach(function(doc){
